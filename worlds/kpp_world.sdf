@@ -1,0 +1,137 @@
+<sdf version="1.6">
+  <world name="kpp_world">
+    <physics name="1ms" type="ode">
+        <max_step_size>0.001</max_step_size>
+        <real_time_factor>1.0</real_time_factor>
+    </physics>
+
+    <plugin
+        filename="ignition-gazebo-physics-system"
+        name="ignition::gazebo::systems::Physics">
+    </plugin>
+    <plugin
+        filename="ignition-gazebo-user-commands-system"
+        name="ignition::gazebo::systems::UserCommands">
+    </plugin>
+    <plugin
+        filename="ignition-gazebo-scene-broadcaster-system"
+        name="ignition::gazebo::systems::SceneBroadcaster">
+    </plugin>
+    <plugin filename="ignition-gazebo-sensors-system"
+        name="ignition::gazebo::systems::Sensors">
+        <render_engine>ogre2</render_engine>
+    </plugin>
+    <plugin
+        filename="ignition-gazebo-buoyancy-system"
+        name="ignition::gazebo::systems::Buoyancy">
+        <uniform_fluid_density>1000</uniform_fluid_density>
+    </plugin>
+    <!--
+    <plugin
+        filename="libignition-gazebo-ros2-system.so"
+        name="ignition::gazebo::systems::Ros2">
+        <namespace>camera</namespace>
+        <tf>true</tf>
+        <clock>true</clock>
+    </plugin> -->
+
+    
+    <scene>
+        <ambient>0.6 0.6 0.6 1</ambient>
+        <background>0.3 0.4 0.5 1</background>
+    </scene>
+    <light type="directional" name="sun">
+        <cast_shadows>true</cast_shadows>
+        <pose>0 0 10 0 0 0</pose>
+        <diffuse>0.8 0.8 0.8 1</diffuse>
+        <specular>0.2 0.2 0.2 1</specular>
+        <direction>-0.5 0.1 -0.9</direction>
+    </light>
+
+    <model name="cylinder_body">
+        <pose>0 0 0 0 1.5708 0</pose>
+        <link name="base_link">
+            <inertial>
+            <mass>2600.0</mass>
+            <inertia>
+                <ixx>8398.438</ixx>   <!-- (1/12) × m × (3r² + h²) -->
+                <ixy>0</ixy>
+                <ixz>0</ixz>
+                <iyy>490.875</iyy>   <!-- (1/12) × m × (3r² + h²) -->
+                <iyz>0</iyz>
+                <izz>8398.438</izz>     <!-- (1/2) × m × r² -->
+            </inertia>
+            </inertial>
+            
+            <collision name="collision">
+            <geometry>
+                <cylinder>
+                <radius>0.5</radius>
+                <length>3.0</length>
+                </cylinder>
+            </geometry>
+            </collision>
+            
+            <visual name="visual">
+                <geometry>
+                    <cylinder>
+                    <radius>0.5</radius>
+                    <length>3.0</length>
+                    </cylinder>
+                </geometry>
+                <material>
+                    <ambient>0.9 0.9 0.9 1</ambient>
+                    <diffuse>0.9 0.9 0.9 1</diffuse>
+                </material>
+            </visual>
+            <sensor name='front_camera' type='camera'>
+                <pose>3.1 0 0 0 0 0</pose>
+                <camera>
+                    <save enabled="false">
+                        <path>camera_save</path>
+                    </save>
+                    <horizontal_fov>1.047</horizontal_fov>
+                    <image>
+                        <width>720</width>
+                        <height>720</height>
+                    </image>
+                    <clip>
+                        <near>0.1</near>
+                        <far>100</far>
+                    </clip>
+                </camera>
+                <always_on>1</always_on>
+                <update_rate>30</update_rate>
+                <visualize>true</visualize>
+                <topic>camera</topic>
+            </sensor>
+        </link>
+    </model>
+
+    <model name="object">
+    <static>true</static>
+    <pose>6 0 0 0 0 0</pose>
+    <link name="rect_link">
+        <collision name="collision">
+            <geometry>
+                <box>
+                    <size>4 4 1</size>
+                </box>
+            </geometry>
+        </collision>
+        
+        <visual name="visual">
+            <geometry>
+                <box>
+                    <size>4 4 1</size>
+                </box>
+            </geometry>
+            <material>
+                <ambient>1 0 0 1</ambient>
+                <diffuse>1 0 0 1</diffuse>
+            </material>
+        </visual>
+    </link>
+</model>
+  </world>
+</sdf>
